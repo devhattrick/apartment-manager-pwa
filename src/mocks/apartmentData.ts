@@ -1,0 +1,112 @@
+import type { Contract, Guest, Room } from '../types';
+
+export const mockRooms: Room[] = [
+  {
+    id: 'r1',
+    roomNumber: '101',
+    floor: 1,
+    building: 'A',
+    roomType: 'Standard',
+    defaultDailyPrice: 650,
+    defaultMonthlyPrice: 6500,
+    status: 'AVAILABLE',
+  },
+  {
+    id: 'r2',
+    roomNumber: '102',
+    floor: 1,
+    building: 'A',
+    roomType: 'Standard',
+    defaultDailyPrice: 650,
+    defaultMonthlyPrice: 6500,
+    status: 'OCCUPIED',
+  },
+  {
+    id: 'r3',
+    roomNumber: '103',
+    floor: 1,
+    building: 'A',
+    roomType: 'Deluxe',
+    defaultDailyPrice: 850,
+    defaultMonthlyPrice: 8200,
+    status: 'RESERVED',
+  },
+  {
+    id: 'r4',
+    roomNumber: '201',
+    floor: 2,
+    building: 'A',
+    roomType: 'Standard',
+    defaultDailyPrice: 650,
+    defaultMonthlyPrice: 6500,
+    status: 'AVAILABLE',
+  },
+  {
+    id: 'r5',
+    roomNumber: '202',
+    floor: 2,
+    building: 'A',
+    roomType: 'Deluxe',
+    defaultDailyPrice: 850,
+    defaultMonthlyPrice: 8200,
+    status: 'MAINTENANCE',
+  },
+  {
+    id: 'r6',
+    roomNumber: '203',
+    floor: 2,
+    building: 'A',
+    roomType: 'Standard',
+    defaultDailyPrice: 650,
+    defaultMonthlyPrice: 6500,
+    status: 'OCCUPIED',
+  },
+];
+
+export const mockGuests: Guest[] = [
+  {
+    id: 'g1',
+    firstName: 'Peerapol',
+    lastName: 'Panmuang',
+    phone: '0812345678',
+  },
+  {
+    id: 'g2',
+    firstName: 'Demo',
+    lastName: 'Guest',
+    phone: '0899999999',
+  },
+];
+
+export const mockContracts: Contract[] = [
+  {
+    id: 'c1',
+    roomId: 'r2',
+    guestId: 'g1',
+    stayType: 'MONTHLY',
+    price: 7000,
+    checkInDate: '2026-03-01',
+    checkOutDate: '2026-03-31',
+    status: 'ACTIVE',
+  },
+  {
+    id: 'c2',
+    roomId: 'r3',
+    guestId: 'g2',
+    stayType: 'DAILY',
+    price: 850,
+    checkInDate: '2026-03-15',
+    checkOutDate: '2026-03-17',
+    status: 'RESERVED',
+  },
+  {
+    id: 'c3',
+    roomId: 'r6',
+    guestId: 'g2',
+    stayType: 'MONTHLY',
+    price: 6500,
+    checkInDate: '2026-03-10',
+    checkOutDate: '2026-04-10',
+    status: 'ACTIVE',
+  },
+];

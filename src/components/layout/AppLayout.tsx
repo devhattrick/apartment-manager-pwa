@@ -5,25 +5,27 @@ import i18n from '../../i18n';
 import { useAppStore } from '../../store/useAppStore';
 
 const navItems = [
-  { to: '/dashboard', key: 'dashboard' },
-  { to: '/rooms', key: 'rooms' },
-  { to: '/rooms/block', key: 'roomBlock' },
-  { to: '/guests', key: 'guests' },
+  { to: '/dashboard', key: 'dashboard', end: true },
+  { to: '/rooms', key: 'rooms', end: true },
+  { to: '/rooms/block', key: 'roomBlock', end: true },
+  { to: '/guests', key: 'guests', end: true },
   { to: '/contracts', key: 'contracts' },
-  { to: '/reports', key: 'reports' },
+  { to: '/reports', key: 'reports', end: true },
 ];
 
 function NavigationLink({
   to,
   label,
   compact = false,
+  end = false,
 }: {
   to: string;
   label: string;
   compact?: boolean;
+  end?: boolean;
 }) {
   return (
-    <NavLink key={to} to={to}>
+    <NavLink key={to} to={to} end={end}>
       {({ isActive }) => (
         <Box
           position="relative"
@@ -161,7 +163,12 @@ export default function AppLayout() {
               </Text>
               <Flex direction="column" gap="2">
                 {navItems.map((item) => (
-                  <NavigationLink key={item.to} to={item.to} label={t(item.key)} />
+                  <NavigationLink
+                    key={item.to}
+                    to={item.to}
+                    label={t(item.key)}
+                    end={item.end}
+                  />
                 ))}
               </Flex>
             </Box>
@@ -272,6 +279,7 @@ export default function AppLayout() {
                   to={item.to}
                   label={t(item.key)}
                   compact
+                  end={item.end}
                 />
               ))}
             </Flex>

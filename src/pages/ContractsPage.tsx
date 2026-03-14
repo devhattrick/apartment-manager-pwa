@@ -1,7 +1,8 @@
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import StatusPill from '../components/common/StatusPill';
 import { useApartmentStore } from '../store/useApartmentStore';
 import { getGuestById } from '../lib/apartment';
 import type { Contract } from '../types';
@@ -27,11 +28,11 @@ function getContractStatusLabel(
 function getContractStatusClasses(status: Contract['status']) {
   switch (status) {
     case 'ACTIVE':
-      return 'bg-green-100 text-green-700 border-green-200';
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
     case 'RESERVED':
-      return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      return 'bg-amber-50 text-amber-700 border-amber-200';
     case 'COMPLETED':
-      return 'bg-blue-100 text-blue-700 border-blue-200';
+      return 'bg-sky-50 text-sky-700 border-sky-200';
     case 'CANCELLED':
       return 'bg-slate-100 text-slate-700 border-slate-200';
     default:
@@ -53,7 +54,7 @@ export default function ContractsPage() {
 
   return (
     <Box>
-      <Box className="flex items-center justify-between gap-3">
+      <Flex align="center" justify="space-between" gap="3" wrap="wrap">
         <Heading size="lg" color="brandDark">
           {t('contractsTitle')}
         </Heading>
@@ -66,9 +67,9 @@ export default function ContractsPage() {
         >
           {t('createNewContract')}
         </Button>
-      </Box>
+      </Flex>
 
-      <Box mt="6" className="space-y-4">
+      <Box mt="6" display="flex" flexDirection="column" gap="4">
         {sortedContracts.length === 0 ? (
           <Text color="textMuted">{t('noContracts')}</Text>
         ) : (
@@ -79,61 +80,93 @@ export default function ContractsPage() {
             return (
               <Box
                 key={contract.id}
-                bg="white"
-                rounded="2xl"
+                bg="rgba(255, 255, 255, 0.82)"
+                rounded="3xl"
                 border="1px solid"
-                borderColor="borderSubtle"
-                shadow="sm"
-                p="5"
+                borderColor="rgba(15, 118, 110, 0.12)"
+                boxShadow="panel"
+                backdropFilter="blur(16px)"
+                p={{ base: '5', md: '6' }}
               >
-                <Box className="flex items-start justify-between gap-3">
-                  <Text fontSize="xl" fontWeight="bold" color="brandDark">
-                    Room {room?.roomNumber || '-'}
-                  </Text>
+                <Flex align="start" justify="space-between" gap="4" wrap="wrap">
+                  <Box>
+                    <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+                      {t('contracts')}
+                    </Text>
+                    <Text mt="2" fontSize="2xl" fontWeight="bold" color="brandDark">
+                      Room {room?.roomNumber || '-'}
+                    </Text>
+                  </Box>
 
-                  <span
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold ${getContractStatusClasses(
-                      contract.status
-                    )}`}
-                  >
-                    {getContractStatusLabel(contract.status, t)}
-                  </span>
+                  <StatusPill
+                    label={getContractStatusLabel(contract.status, t)}
+                    toneClassName={getContractStatusClasses(contract.status)}
+                  />
+                </Flex>
+
+                <Box
+                  mt="5"
+                  rounded="2xl"
+                  bg="surfaceMuted"
+                  border="1px solid"
+                  borderColor="rgba(15, 118, 110, 0.08)"
+                  p="4"
+                >
+                  <Flex direction="column" gap="3">
+                    <Flex align="center" justify="space-between" gap="4" wrap="wrap">
+                      <Text fontSize="sm" color="textMuted">
+                        {t('guestName')}
+                      </Text>
+                      <Text fontWeight="medium" color="brandDark">
+                        {guest ? `${guest.firstName} ${guest.lastName}` : '-'}
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" justify="space-between" gap="4" wrap="wrap">
+                      <Text fontSize="sm" color="textMuted">
+                        {t('stayType')}
+                      </Text>
+                      <Text fontWeight="medium" color="brandDark">
+                        {contract.stayType === 'DAILY' ? t('daily') : t('monthly')}
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" justify="space-between" gap="4" wrap="wrap">
+                      <Text fontSize="sm" color="textMuted">
+                        {t('price')}
+                      </Text>
+                      <Text fontWeight="medium" color="brandDark">
+                        {contract.price.toLocaleString()} THB
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" justify="space-between" gap="4" wrap="wrap">
+                      <Text fontSize="sm" color="textMuted">
+                        {t('checkIn')}
+                      </Text>
+                      <Text fontWeight="medium" color="brandDark">
+                        {contract.checkInDate}
+                      </Text>
+                    </Flex>
+
+                    <Flex align="center" justify="space-between" gap="4" wrap="wrap">
+                      <Text fontSize="sm" color="textMuted">
+                        {t('checkOut')}
+                      </Text>
+                      <Text fontWeight="medium" color="brandDark">
+                        {contract.checkOutDate}
+                      </Text>
+                    </Flex>
+                  </Flex>
                 </Box>
 
-                <Box mt="3" className="space-y-1 text-sm">
-                  <div>
-                    <span className="font-medium">{t('guestName')}: </span>
-                    <span>
-                      {guest ? `${guest.firstName} ${guest.lastName}` : '-'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium">{t('stayType')}: </span>
-                    <span>
-                      {contract.stayType === 'DAILY' ? t('daily') : t('monthly')}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium">{t('price')}: </span>
-                    <span>{contract.price.toLocaleString()} THB</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">{t('checkIn')}: </span>
-                    <span>{contract.checkInDate}</span>
-                  </div>
-                  <div>
-                    <span className="font-medium">{t('checkOut')}: </span>
-                    <span>{contract.checkOutDate}</span>
-                  </div>
-                </Box>
-
-                <Box mt="4" className="flex flex-wrap gap-2">
+                <Flex mt="5" gap="2" wrap="wrap">
                   {(contract.status === 'ACTIVE' ||
                     contract.status === 'RESERVED') && (
                     <Button
                       size="sm"
                       variant="outline"
-                      rounded="lg"
+                      rounded="full"
                       onClick={() => navigate(`/contracts/${contract.id}/edit`)}
                     >
                       {t('editContract')}
@@ -146,7 +179,7 @@ export default function ContractsPage() {
                         size="sm"
                         bg="brandPrimary"
                         color="white"
-                        rounded="lg"
+                        rounded="full"
                         onClick={() =>
                           updateContractStatus(contract.id, 'ACTIVE')
                         }
@@ -158,7 +191,7 @@ export default function ContractsPage() {
                         size="sm"
                         variant="outline"
                         colorPalette="red"
-                        rounded="lg"
+                        rounded="full"
                         onClick={() =>
                           updateContractStatus(contract.id, 'CANCELLED')
                         }
@@ -172,7 +205,7 @@ export default function ContractsPage() {
                     <Button
                       size="sm"
                       colorPalette="green"
-                      rounded="lg"
+                      rounded="full"
                       onClick={() =>
                         updateContractStatus(contract.id, 'COMPLETED')
                       }
@@ -180,7 +213,7 @@ export default function ContractsPage() {
                       {t('completeContract')}
                     </Button>
                   )}
-                </Box>
+                </Flex>
               </Box>
             );
           })

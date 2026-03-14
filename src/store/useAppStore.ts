@@ -17,6 +17,30 @@ type AppState = {
   setLanguage: (lang: Language) => void;
 };
 
+function normalizeEmail(email: string) {
+  const trimmed = email.trim();
+
+  if (!trimmed || !trimmed.includes('@')) {
+    return 'demo@apartment.com';
+  }
+
+  return trimmed.toLowerCase();
+}
+
+function toDisplayName(email: string) {
+  const localPart = email.split('@')[0]?.replace(/[._-]+/g, ' ').trim();
+
+  if (!localPart) {
+    return 'Operator';
+  }
+
+  return localPart
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
@@ -24,14 +48,17 @@ export const useAppStore = create<AppState>()(
       user: null,
       language: (localStorage.getItem('app-lang') as Language) || 'th',
 
-      login: (email: string) =>
+      login: (email: string) => {
+        const normalizedEmail = normalizeEmail(email);
+
         set({
           isAuthenticated: true,
           user: {
-            email,
-            name: 'Operator',
+            email: normalizedEmail,
+            name: toDisplayName(normalizedEmail),
           },
-        }),
+        });
+      },
 
       logout: () =>
         set({

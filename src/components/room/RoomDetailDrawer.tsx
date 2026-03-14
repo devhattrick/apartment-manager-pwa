@@ -1,5 +1,6 @@
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import StatusPill from '../common/StatusPill';
 import { getGuestById, getStatusClasses, getStatusLabel } from '../../lib/apartment';
 import { useApartmentStore } from '../../store/useApartmentStore';
 import { useAppStore } from '../../store/useAppStore';
@@ -31,7 +32,8 @@ export default function RoomDetailDrawer({
       position="fixed"
       inset="0"
       zIndex="50"
-      bg="rgba(15,23,42,0.35)"
+      bg="rgba(10, 33, 41, 0.52)"
+      backdropFilter="blur(10px)"
       onClick={onClose}
     >
       <Box
@@ -39,80 +41,128 @@ export default function RoomDetailDrawer({
         top="0"
         right="0"
         h="100%"
-        w={{ base: '100%', md: '420px' }}
-        bg="white"
-        shadow="2xl"
-        p="5"
+        w={{ base: '100%', md: '460px' }}
+        bg="linear-gradient(180deg, #f7f8f6 0%, #eff4f2 100%)"
+        borderLeft="1px solid rgba(15, 118, 110, 0.12)"
+        boxShadow="-24px 0 48px -32px rgba(14, 62, 74, 0.36)"
+        p={{ base: '5', md: '6' }}
         onClick={(e) => e.stopPropagation()}
         className="overflow-y-auto"
       >
-        <Box className="flex items-start justify-between gap-3">
+        <Flex align="start" justify="space-between" gap="3">
           <Box>
-            <Text fontSize="2xl" fontWeight="bold" color="brandDark">
+            <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+              {t('roomList')}
+            </Text>
+            <Text mt="3" fontSize="3xl" fontWeight="bold" color="brandDark">
               Room {room.roomNumber}
             </Text>
-            <Text color="textMuted">
+            <Text mt="2" color="textMuted">
               {t('building')}: {room.building} · {t('floor')}: {room.floor}
             </Text>
           </Box>
 
-          <Button size="sm" variant="outline" onClick={onClose}>
-            Close
-          </Button>
-        </Box>
-
-        <Box mt="4">
-          <span
-            className={`rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
-              room.status
-            )}`}
+          <Button
+            size="sm"
+            rounded="full"
+            border="1px solid"
+            borderColor="rgba(15, 118, 110, 0.14)"
+            bg="rgba(255, 255, 255, 0.8)"
+            color="brandDark"
+            _hover={{ bg: 'white' }}
+            onClick={onClose}
           >
-            {getStatusLabel(room.status, language)}
-          </span>
+            {t('close')}
+          </Button>
+        </Flex>
+
+        <Box mt="5">
+          <StatusPill
+            label={getStatusLabel(room.status, language)}
+            toneClassName={getStatusClasses(room.status)}
+          />
         </Box>
 
-        <Box mt="6" className="space-y-3 text-sm">
-          <div>
-            <span className="font-medium">{t('guestName')}: </span>
-            <span>{guest ? `${guest.firstName} ${guest.lastName}` : t('noGuest')}</span>
-          </div>
+        <Box
+          mt="6"
+          rounded="3xl"
+          border="1px solid"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          bg="rgba(255, 255, 255, 0.76)"
+          p="5"
+        >
+          <Flex direction="column" gap="3.5">
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('guestName')}</Text>
+              <Text fontWeight="medium" color="brandDark" textAlign="right">
+                {guest ? `${guest.firstName} ${guest.lastName}` : t('noGuest')}
+              </Text>
+            </Flex>
 
-          <div>
-            <span className="font-medium">{t('stayType')}: </span>
-            <span>
-              {contract ? (contract.stayType === 'DAILY' ? t('daily') : t('monthly')) : '-'}
-            </span>
-          </div>
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('stayType')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {contract ? (contract.stayType === 'DAILY' ? t('daily') : t('monthly')) : '-'}
+              </Text>
+            </Flex>
 
-          <div>
-            <span className="font-medium">{t('price')}: </span>
-            <span>{contract ? `${contract.price.toLocaleString()} THB` : '-'}</span>
-          </div>
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('price')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {contract ? `${contract.price.toLocaleString()} THB` : '-'}
+              </Text>
+            </Flex>
 
-          <div>
-            <span className="font-medium">{t('checkIn')}: </span>
-            <span>{contract?.checkInDate || '-'}</span>
-          </div>
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('checkIn')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {contract?.checkInDate || '-'}
+              </Text>
+            </Flex>
 
-          <div>
-            <span className="font-medium">{t('checkOut')}: </span>
-            <span>{contract?.checkOutDate || '-'}</span>
-          </div>
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('checkOut')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {contract?.checkOutDate || '-'}
+              </Text>
+            </Flex>
+          </Flex>
+        </Box>
 
-          <div>
-            <span className="font-medium">Room Type: </span>
-            <span>{room.roomType || '-'}</span>
-          </div>
+        <Box
+          mt="5"
+          rounded="3xl"
+          border="1px solid"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          bg="rgba(255, 255, 255, 0.76)"
+          p="5"
+        >
+          <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+            {t('roomStatus')}
+          </Text>
 
-          <div>
-            <span className="font-medium">Default Daily: </span>
-            <span>{room.defaultDailyPrice?.toLocaleString() || '-'} THB</span>
-          </div>
+          <Flex direction="column" gap="3.5" mt="4">
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('roomType')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {room.roomType || '-'}
+              </Text>
+            </Flex>
 
-          <div>
-            <span className="font-medium">Default Monthly: </span>
-            <span>{room.defaultMonthlyPrice?.toLocaleString() || '-'} THB</span>
-          </div>
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('defaultDaily')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {room.defaultDailyPrice?.toLocaleString() || '-'} THB
+              </Text>
+            </Flex>
+
+            <Flex align="center" justify="space-between" gap="4">
+              <Text color="textMuted">{t('defaultMonthly')}</Text>
+              <Text fontWeight="medium" color="brandDark">
+                {room.defaultMonthlyPrice?.toLocaleString() || '-'} THB
+              </Text>
+            </Flex>
+          </Flex>
         </Box>
       </Box>
     </Box>

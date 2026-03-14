@@ -11,6 +11,22 @@ import RoomBlockPage from '../pages/RoomBlockPage';
 import RoomsPage from '../pages/RoomsPage';
 import { useAppStore } from '../store/useAppStore';
 
+function RootRedirect() {
+  const { isAuthenticated } = useAppStore();
+
+  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />;
+}
+
+function LoginRoute() {
+  const { isAuthenticated } = useAppStore();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <LoginPage />;
+}
+
 function ProtectedLayout() {
   const { isAuthenticated } = useAppStore();
 
@@ -24,8 +40,8 @@ function ProtectedLayout() {
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<RootRedirect />} />
+      <Route path="/login" element={<LoginRoute />} />
 
       <Route element={<ProtectedLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
@@ -38,7 +54,7 @@ export default function AppRouter() {
         <Route path="/reports" element={<ReportsPage />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<RootRedirect />} />
     </Routes>
   );
 }

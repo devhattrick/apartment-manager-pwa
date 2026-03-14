@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,6 +10,9 @@ import {
   type ContractFormValues,
 } from '../schemas/contractSchema';
 import { useApartmentStore } from '../store/useApartmentStore';
+
+const inputClassName = 'app-input';
+const selectClassName = 'app-select';
 
 export default function CreateContractPage() {
   const { t } = useTranslation();
@@ -86,157 +89,163 @@ export default function CreateContractPage() {
   };
 
   return (
-    <Box maxW="720px">
-      <Button variant="outline" rounded="xl" onClick={() => navigate('/contracts')}>
+    <Box maxW="840px">
+      <Button variant="outline" rounded="full" onClick={() => navigate('/contracts')}>
         {t('backToContracts')}
       </Button>
 
       <Heading size="lg" color="brandDark" mt="4">
         {t('createContractTitle')}
       </Heading>
+      <Text mt="2" color="textMuted">
+        {t('createNewContract')}
+      </Text>
 
       {guests.length === 0 ? (
-        <Text mt="4" color="textMuted">
-          {t('pleaseAddGuestFirst')}
-        </Text>
+        <Box
+          mt="6"
+          rounded="3xl"
+          border="1px solid"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          bg="rgba(255, 255, 255, 0.82)"
+          boxShadow="panel"
+          p="5"
+        >
+          <Text color="textMuted">{t('pleaseAddGuestFirst')}</Text>
+        </Box>
       ) : availableRooms.length === 0 ? (
-        <Text mt="4" color="textMuted">
-          {t('noAvailableRooms')}
-        </Text>
+        <Box
+          mt="6"
+          rounded="3xl"
+          border="1px solid"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          bg="rgba(255, 255, 255, 0.82)"
+          boxShadow="panel"
+          p="5"
+        >
+          <Text color="textMuted">{t('noAvailableRooms')}</Text>
+        </Box>
       ) : (
         <Box
           mt="6"
-          bg="white"
-          rounded="2xl"
+          bg="rgba(255, 255, 255, 0.82)"
+          rounded="3xl"
           border="1px solid"
-          borderColor="borderSubtle"
-          shadow="sm"
-          p="5"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          boxShadow="panel"
+          backdropFilter="blur(16px)"
+          p={{ base: '5', md: '6' }}
         >
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('selectGuest')}
-              </label>
-              <select
-                {...register('guestId')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              >
-                <option value="">{t('pleaseSelect')}</option>
-                {guests.map((guest) => (
-                  <option key={guest.id} value={guest.id}>
-                    {guest.firstName} {guest.lastName}
-                  </option>
-                ))}
-              </select>
-              <FormErrorText
-                message={errors.guestId?.message ? t(errors.guestId.message) : ''}
-              />
-            </div>
+          <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+            {t('createContractTitle')}
+          </Text>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('selectRoom')}
-              </label>
-              <select
-                {...register('roomId')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              >
-                <option value="">{t('pleaseSelect')}</option>
-                {availableRooms.map((room) => (
-                  <option key={room.id} value={room.id}>
-                    {room.building}-{room.roomNumber}
-                  </option>
-                ))}
-              </select>
-              <FormErrorText
-                message={errors.roomId?.message ? t(errors.roomId.message) : ''}
-              />
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Flex direction="column" gap="4" mt="5">
+              <Box>
+                <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                  {t('selectGuest')}
+                </Text>
+                <select {...register('guestId')} className={selectClassName}>
+                  <option value="">{t('pleaseSelect')}</option>
+                  {guests.map((guest) => (
+                    <option key={guest.id} value={guest.id}>
+                      {guest.firstName} {guest.lastName}
+                    </option>
+                  ))}
+                </select>
+                <FormErrorText
+                  message={errors.guestId?.message ? t(errors.guestId.message) : ''}
+                />
+              </Box>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('stayType')}
-              </label>
-              <select
-                {...register('stayType')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              >
-                <option value="DAILY">{t('daily')}</option>
-                <option value="MONTHLY">{t('monthly')}</option>
-              </select>
-            </div>
+              <Box>
+                <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                  {t('selectRoom')}
+                </Text>
+                <select {...register('roomId')} className={selectClassName}>
+                  <option value="">{t('pleaseSelect')}</option>
+                  {availableRooms.map((room) => (
+                    <option key={room.id} value={room.id}>
+                      {room.building}-{room.roomNumber}
+                    </option>
+                  ))}
+                </select>
+                <FormErrorText
+                  message={errors.roomId?.message ? t(errors.roomId.message) : ''}
+                />
+              </Box>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('price')}
-              </label>
-              <Controller
-                name="price"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    type="number"
-                    min="1"
-                    value={field.value || ''}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+              <Box>
+                <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                  {t('stayType')}
+                </Text>
+                <select {...register('stayType')} className={selectClassName}>
+                  <option value="DAILY">{t('daily')}</option>
+                  <option value="MONTHLY">{t('monthly')}</option>
+                </select>
+              </Box>
+
+              <Box>
+                <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                  {t('price')}
+                </Text>
+                <Controller
+                  name="price"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="number"
+                      min="1"
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      className={inputClassName}
+                    />
+                  )}
+                />
+                <FormErrorText
+                  message={errors.price?.message ? t(errors.price.message) : ''}
+                />
+              </Box>
+
+              <Box display="grid" gridTemplateColumns={{ base: '1fr', md: '1fr 1fr' }} gap="4">
+                <Box>
+                  <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                    {t('checkIn')}
+                  </Text>
+                  <input type="date" {...register('checkInDate')} className={inputClassName} />
+                  <FormErrorText
+                    message={errors.checkInDate?.message ? t(errors.checkInDate.message) : ''}
                   />
-                )}
-              />
-              <FormErrorText
-                message={errors.price?.message ? t(errors.price.message) : ''}
-              />
-            </div>
+                </Box>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  {t('checkIn')}
-                </label>
-                <input
-                  type="date"
-                  {...register('checkInDate')}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                />
-                <FormErrorText
-                  message={errors.checkInDate?.message ? t(errors.checkInDate.message) : ''}
-                />
-              </div>
+                <Box>
+                  <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                    {t('checkOut')}
+                  </Text>
+                  <input type="date" {...register('checkOutDate')} className={inputClassName} />
+                  <FormErrorText
+                    message={errors.checkOutDate?.message ? t(errors.checkOutDate.message) : ''}
+                  />
+                </Box>
+              </Box>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                  {t('checkOut')}
-                </label>
-                <input
-                  type="date"
-                  {...register('checkOutDate')}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                />
-                <FormErrorText
-                  message={errors.checkOutDate?.message ? t(errors.checkOutDate.message) : ''}
-                />
-              </div>
-            </div>
+              <Box>
+                <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                  {t('contractStatus')}
+                </Text>
+                <select {...register('status')} className={selectClassName}>
+                  <option value="ACTIVE">{t('active')}</option>
+                  <option value="RESERVED">{t('contractReserved')}</option>
+                </select>
+              </Box>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('contractStatus')}
-              </label>
-              <select
-                {...register('status')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              >
-                <option value="ACTIVE">{t('active')}</option>
-                <option value="RESERVED">{t('contractReserved')}</option>
-              </select>
-            </div>
+              <FormErrorText message={submitError} />
 
-            <FormErrorText message={submitError} />
-
-            <Button type="submit" w="full" bg="brandPrimary" color="white" rounded="xl">
-              {t('save')}
-            </Button>
+              <Button type="submit" w="full" bg="brandPrimary" color="white" rounded="full" h="12">
+                {t('save')}
+              </Button>
+            </Flex>
           </form>
         </Box>
       )}

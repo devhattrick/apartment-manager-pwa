@@ -8,12 +8,13 @@ type Props = {
 export default function PlaceholderPage({ title, description }: Props) {
   return (
     <Box
-      bg="white"
-      rounded="2xl"
-      p="6"
+      bg="rgba(255, 255, 255, 0.82)"
+      rounded="3xl"
+      p={{ base: '5', md: '6' }}
       border="1px solid"
-      borderColor="borderSubtle"
-      shadow="sm"
+      borderColor="rgba(15, 118, 110, 0.12)"
+      boxShadow="panel"
+      backdropFilter="blur(16px)"
     >
       <Heading size="md" color="brandDark">
         {title}

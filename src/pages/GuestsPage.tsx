@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Heading } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, Heading, Text } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import FormErrorText from '../components/common/FormErrorText';
 import { guestSchema, type GuestFormValues } from '../schemas/guestSchema';
 import { useApartmentStore } from '../store/useApartmentStore';
+
+const fieldClassName = 'app-input';
 
 export default function GuestsPage() {
   const { t } = useTranslation();
@@ -44,85 +46,107 @@ export default function GuestsPage() {
       <Heading size="lg" color="brandDark">
         {t('guestsTitle')}
       </Heading>
+      <Text mt="2" color="textMuted">
+        {guests.length} {t('guests')}
+      </Text>
 
-      <Grid templateColumns={{ base: '1fr', xl: '420px 1fr' }} gap="4" mt="6">
+      <Grid templateColumns={{ base: '1fr', xl: '420px 1fr' }} gap="5" mt="6">
         <Box
-          bg="white"
-          rounded="2xl"
+          bg="rgba(255, 255, 255, 0.82)"
+          rounded="3xl"
           border="1px solid"
-          borderColor="borderSubtle"
-          shadow="sm"
-          p="5"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          boxShadow="panel"
+          backdropFilter="blur(16px)"
+          p={{ base: '5', md: '6' }}
         >
-          <Heading size="md" mb="4">
+          <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+            {t('addGuestTitle')}
+          </Text>
+          <Heading size="md" mt="3" color="brandDark">
             {t('addGuestTitle')}
           </Heading>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('firstName')}
-              </label>
-              <input
-                {...register('firstName')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              />
-              <FormErrorText
-                message={errors.firstName?.message ? t(errors.firstName.message) : ''}
-              />
-            </div>
+          <Box mt="5">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Flex direction="column" gap="4">
+                <Box>
+                  <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                    {t('firstName')}
+                  </Text>
+                  <input {...register('firstName')} className={fieldClassName} />
+                  <FormErrorText
+                    message={errors.firstName?.message ? t(errors.firstName.message) : ''}
+                  />
+                </Box>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('lastName')}
-              </label>
-              <input
-                {...register('lastName')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              />
-              <FormErrorText
-                message={errors.lastName?.message ? t(errors.lastName.message) : ''}
-              />
-            </div>
+                <Box>
+                  <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                    {t('lastName')}
+                  </Text>
+                  <input {...register('lastName')} className={fieldClassName} />
+                  <FormErrorText
+                    message={errors.lastName?.message ? t(errors.lastName.message) : ''}
+                  />
+                </Box>
 
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                {t('phone')}
-              </label>
-              <input
-                {...register('phone')}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              />
-            </div>
+                <Box>
+                  <Text mb="2" fontSize="sm" fontWeight="medium" color="textMuted">
+                    {t('phone')}
+                  </Text>
+                  <input {...register('phone')} className={fieldClassName} />
+                </Box>
 
-            <Button type="submit" w="full" bg="brandPrimary" color="white" rounded="xl">
-              {t('save')}
-            </Button>
-          </form>
+                <Button type="submit" w="full" bg="brandPrimary" color="white" rounded="full" h="12">
+                  {t('save')}
+                </Button>
+              </Flex>
+            </form>
+          </Box>
         </Box>
 
         <Box
-          bg="white"
-          rounded="2xl"
+          bg="rgba(255, 255, 255, 0.82)"
+          rounded="3xl"
           border="1px solid"
-          borderColor="borderSubtle"
-          shadow="sm"
-          p="5"
+          borderColor="rgba(15, 118, 110, 0.12)"
+          boxShadow="panel"
+          backdropFilter="blur(16px)"
+          p={{ base: '5', md: '6' }}
         >
-          <Heading size="md" mb="4">
-            {t('guestsTitle')}
-          </Heading>
+          <Flex align="center" justify="space-between" gap="3" wrap="wrap">
+            <Box>
+              <Text fontSize="xs" fontWeight="bold" letterSpacing="0.18em" textTransform="uppercase" color="brandPrimary">
+                {t('guestsTitle')}
+              </Text>
+              <Heading size="md" mt="3" color="brandDark">
+                {t('guestsTitle')}
+              </Heading>
+            </Box>
+            <Text color="textMuted">
+              {guests.length} {t('guests')}
+            </Text>
+          </Flex>
 
-          <div className="space-y-3">
+          <Flex direction="column" gap="3" mt="5">
             {guests.map((guest) => (
-              <div key={guest.id} className="rounded-xl border border-slate-200 p-4">
-                <div className="font-semibold text-slate-800">
+              <Box
+                key={guest.id}
+                rounded="2xl"
+                border="1px solid"
+                borderColor="rgba(15, 118, 110, 0.1)"
+                bg="surfaceMuted"
+                p="4"
+              >
+                <Text fontSize="lg" fontWeight="semibold" color="brandDark">
                   {guest.firstName} {guest.lastName}
-                </div>
-                <div className="text-sm text-slate-500">{guest.phone || '-'}</div>
-              </div>
+                </Text>
+                <Text mt="2" color="textMuted">
+                  {guest.phone || '-'}
+                </Text>
+              </Box>
             ))}
-          </div>
+          </Flex>
         </Box>
       </Grid>
     </Box>

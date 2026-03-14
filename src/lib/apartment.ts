@@ -15,15 +15,15 @@ export function getStatusLabel(status: RoomStatus, lang: 'th' | 'en') {
 export function getStatusClasses(status: RoomStatus) {
   switch (status) {
     case 'AVAILABLE':
-      return 'bg-green-100 text-green-700 border-green-200';
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
     case 'RESERVED':
-      return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      return 'bg-amber-50 text-amber-700 border-amber-200';
     case 'OCCUPIED':
-      return 'bg-red-100 text-red-700 border-red-200';
+      return 'bg-orange-50 text-orange-700 border-orange-200';
     case 'CLEANING':
-      return 'bg-blue-100 text-blue-700 border-blue-200';
+      return 'bg-sky-50 text-sky-700 border-sky-200';
     case 'MAINTENANCE':
-      return 'bg-slate-200 text-slate-700 border-slate-300';
+      return 'bg-slate-100 text-slate-700 border-slate-200';
     default:
       return 'bg-slate-100 text-slate-700 border-slate-200';
   }

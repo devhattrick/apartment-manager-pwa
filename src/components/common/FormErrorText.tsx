@@ -8,7 +8,7 @@ export default function FormErrorText({ message }: Props) {
   if (!message) return null;
 
   return (
-    <Text mt="1" color="red.500" fontSize="sm">
+    <Text mt="2" color="#B42318" fontSize="sm" fontWeight="medium">
       {message}
     </Text>
   );

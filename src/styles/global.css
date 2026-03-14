@@ -9,10 +9,99 @@ body,
 body {
   margin: 0;
   font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
+    "Aptos",
+    "Sarabun",
+    "Noto Sans Thai",
+    "Inter",
     "Segoe UI",
     sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background-attachment: fixed;
+}
+
+:root {
+  --field-border: rgba(14, 62, 74, 0.1);
+  --field-border-hover: rgba(15, 118, 110, 0.22);
+  --field-border-focus: rgba(15, 118, 110, 0.42);
+  --field-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(242, 248, 246, 0.96) 100%);
+  --field-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 16px 28px -24px rgba(14, 62, 74, 0.34);
+  --field-shadow-focus:
+    0 0 0 4px rgba(15, 118, 110, 0.12),
+    0 22px 38px -28px rgba(15, 118, 110, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-input,
+.app-select {
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--field-border);
+  border-radius: 1.25rem;
+  background: var(--field-surface);
+  box-shadow: var(--field-shadow);
+  color: #16343c;
+  font-size: 1rem;
+  line-height: 1.45;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.app-input::placeholder {
+  color: #95a7ae;
+}
+
+.app-input:hover,
+.app-select:hover {
+  border-color: var(--field-border-hover);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(245, 250, 248, 0.98) 100%);
+}
+
+.app-input:focus,
+.app-select:focus {
+  border-color: var(--field-border-focus);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(249, 253, 252, 1) 100%);
+  box-shadow: var(--field-shadow-focus);
+  transform: translateY(-1px);
+}
+
+.app-input[type="date"] {
+  padding-right: 0.85rem;
+}
+
+.app-input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.78;
+  filter: saturate(0.8) hue-rotate(145deg);
+}
+
+.app-select {
+  appearance: none;
+  padding-right: 3.1rem;
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(242, 248, 246, 0.96) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%230F766E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-position: left top, calc(100% - 1rem) center;
+  background-size: 100% 100%, 0.9rem;
+}
+
+.app-select option {
+  color: #16343c;
+  background: #ffffff;
+}
+
+::selection {
+  background: rgba(15, 118, 110, 0.18);
+  color: #0e3e4a;
 }

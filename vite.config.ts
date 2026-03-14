@@ -1,12 +1,37 @@
+import { copyFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+const rootDir = dirname(fileURLToPath(import.meta.url));
+
+function githubPagesFallback() {
+  let outDir = 'dist';
+
+  return {
+    name: 'github-pages-fallback',
+    apply: 'build' as const,
+    configResolved(config: { build: { outDir: string } }) {
+      outDir = config.build.outDir;
+    },
+    async closeBundle() {
+      const indexPath = resolve(rootDir, outDir, 'index.html');
+      const notFoundPath = resolve(rootDir, outDir, '404.html');
+
+      await copyFile(indexPath, notFoundPath);
+    },
+  };
+}
+
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
+    githubPagesFallback(),
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
@@ -15,12 +40,12 @@ export default defineConfig({
         name: 'Apartment Manager',
         short_name: 'Apt Manager',
         description: 'Installable apartment and room management app',
-        id: '/',
-        start_url: '/dashboard',
+        id: './',
+        start_url: './',
         theme_color: '#09637E',
         background_color: '#EBF4F6',
         display: 'standalone',
-        scope: '/',
+        scope: './',
         categories: ['business', 'productivity'],
         icons: [
           {
@@ -44,17 +69,17 @@ export default defineConfig({
           {
             name: 'Rooms',
             short_name: 'Rooms',
-            url: '/rooms',
+            url: './rooms',
           },
           {
             name: 'Contracts',
             short_name: 'Contracts',
-            url: '/contracts',
+            url: './contracts',
           },
           {
             name: 'Reports',
             short_name: 'Reports',
-            url: '/reports',
+            url: './reports',
           },
         ],
       },
